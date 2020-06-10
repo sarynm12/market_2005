@@ -3,12 +3,17 @@ class Vendor
 
   def initialize(name)
     @name = name
-    @inventory = {}
+    @inventory = Hash.new(0)
     @stock = Hash.new(0)
   end
 
-  def stock_check(item)
+  def check_stock(item)
     @stock[item]
+  end
+
+  def stock(item, quantity)
+    @inventory[item] += quantity
+    @stock[item] += quantity
   end
 
 
