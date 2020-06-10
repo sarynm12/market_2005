@@ -25,8 +25,12 @@ class Market
   end
 
   def potential_revenue
-    @vendors.each do |vendor|
-      #for each item, need to mulptiply amount by price, and if more than one item, add those products together
+    potential_revenue = 0
+    @vendors.inventory.each do |item, quantity|
+        item_rev = item.price * item.amount
+        potential_revenue += item_rev
+    end
+      #for each item, need to mulptiply item quantity by price, and if more than one item, add those products together
   end
 
 end
