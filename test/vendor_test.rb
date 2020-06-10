@@ -1,5 +1,33 @@
+require 'minitest/autorun'
+require 'minitest/pride'
+require './lib/vendor'
+require './lib/item'
+require 'pry'
 
+class VendorTest < Minitest::Test
 
+  def test_it_exists
+    vendor = Vendor.new("Rocky Mountain Fresh")
+    assert_instance_of Vendor, vendor
+  end
+
+  def test_it_has_a_name
+    vendor = Vendor.new("Rocky Mountain Fresh")
+    assert_equal "Rocky Mountain Fresh", vendor.name
+  end
+
+  def test_it_starts_with_no_inventory
+    vendor = Vendor.new("Rocky Mountain Fresh")
+    assert_equal ({}), vendor.inventory
+  end
+
+  def test_it_can_check_item_stock
+    vendor = Vendor.new("Rocky Mountain Fresh")
+    item1 = Item.new({name: 'Peach', price: "$0.75"})
+    assert_equal 0, vendor.stock_check(item1)
+  end
+
+end
 
 
 # ## Iteration 1 - Items & Vendors
