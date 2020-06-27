@@ -19,18 +19,33 @@ class Market
   end
 
   def vendors_that_sell(item)
-    @vendors.select do |vendor|
-     vendor.inventory.include?(item.name)
-    end
+   @vendors.select do |vendor|
+     vendor.inventory.keys.include?(item)
+   end
   end
 
-  def potential_revenue
-    potential_revenue = 0
-    @vendors.inventory.each do |item, quantity|
-        item_rev = item.price * item.amount
-        potential_revenue += item_rev
+  def total_inventory
+    total = {}
+    items = @vendors.flat_map do |vendor|
+      vendor.inventory.keys
+    end.uniq
+    items.each do |item|
+      vendors_for_item = vendors_that_sell(item)
+      total_amount = vendors_for_item.sum do |vendor|
+        vendor.inventory[item]
+      end
+      total[item] = {quantity: total_amount, vendors: vendors_for_item}
     end
-      #for each item, need to mulptiply item quantity by price, and if more than one item, add those products together
+    total
+  end
+
+  def sort_list
+    all_items = @vendors.flat_map do |vendor|
+      vendor.inventory.keys
+    end
+    all_items.map do |item|
+      item.name
+    end.uniq.sort 
   end
 
 end
