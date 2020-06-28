@@ -1,4 +1,5 @@
 require './lib/vendor'
+require 'date'
 
 class Market
   attr_reader :name, :vendors
@@ -30,13 +31,20 @@ class Market
       vendor.inventory.keys
     end.uniq
     items.each do |item|
-      vendors_for_item = vendors_that_sell(item)
-      total_amount = vendors_for_item.sum do |vendor|
+      total_amount = vendors_that_sell(item).sum do |vendor|
         vendor.inventory[item]
       end
-      total[item] = {quantity: total_amount, vendors: vendors_for_item}
+      total[item] = {quantity: total_amount, vendors: vendors_that_sell(item)}
     end
     total
+  end
+
+  def overstocked_items
+    result = []
+    total_inventory.each do |item, item_info|
+      result << item if total_inventory[item][:quantity] > 50 && total_inventory[item][:vendors].count > 1
+    end
+    result
   end
 
   def sort_list
@@ -45,7 +53,11 @@ class Market
     end
     all_items.map do |item|
       item.name
-    end.uniq.sort 
+    end.uniq.sort
+  end
+
+  def date_created
+    date = DateTime.now.strftime("%d/%m/%y")
   end
 
 end
